@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Alibek {
+public class aaaaa {
     @Id
     @GeneratedValue
     private UUID id;
