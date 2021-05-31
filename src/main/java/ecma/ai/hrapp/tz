@@ -3,7 +3,7 @@
 
 
 --Kompanya
---Kompaniyaning bitta direktori bo’ladi.
+--Kompaniyaning bitta direktori bo’ladi.=======1
 --Direktor managerlarni qo’shadi.
 --Managerlarni qo’shganda ularning email manziliga link jo’natiladi.
 --Bo’lim rahbarlari ichida HR_MANAGER degan lavozim bo’lishi kerak.
