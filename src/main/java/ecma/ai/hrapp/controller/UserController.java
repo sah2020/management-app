@@ -6,10 +6,7 @@ import ecma.ai.hrapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.validation.Valid;
@@ -29,5 +26,11 @@ public class UserController {
 
         ApiResponse response = userService.add(userDto);
         return ResponseEntity.status(response.isSuccess() ? 200 : 409).body(response);
+    }
+
+    @PutMapping("/edit")
+    public HttpEntity<?> edit(@RequestBody String password){
+        ApiResponse apiResponse = userService.edit(password);
+        return ResponseEntity.status(apiResponse.isSuccess()?201:409).body(apiResponse);
     }
 }

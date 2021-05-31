@@ -1,10 +1,10 @@
-1. HR_MANAGER qoshishimiz kerak
-Stuffni qosha olishi kerak (email link)
+1.-- HR_MANAGER qoshishimiz kerak
+--Stuffni qosha olishi kerak (email link)
 
-Xodim uchun email
-verifyEmail GET
-ApiResponse da login yolga otvoramiz
-loginga username va password bilan kiradi
+--Xodim uchun email
+--verifyEmail GET
+--ApiResponse da login yolga otvoramiz
+--loginga username va password bilan kiradi
 api/user/edit yolida kodni ozgartirishi mumkin boladi
 
 2. Vazifa

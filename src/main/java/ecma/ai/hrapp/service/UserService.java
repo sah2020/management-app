@@ -10,7 +10,7 @@ import ecma.ai.hrapp.payload.UserDto;
 import ecma.ai.hrapp.repository.RoleRepository;
 import ecma.ai.hrapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +35,6 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     @Autowired
     MailSender mailSender;
-
 
     public ApiResponse add(UserDto userDto) throws MessagingException {
         Optional<Role> optionalRole = roleRepository.findById(userDto.getRoleId());
@@ -78,4 +77,19 @@ public class UserService {
 
     }
 
+    public ApiResponse edit(String password){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Optional<User> optionalUser = userRepository.findById(user.getId());
+
+        if (!optionalUser.isPresent())
+            return new ApiResponse("Not Found",false);
+
+        User user1 = optionalUser.get();
+        if (!user1.isEnabled() || !user1.isAccountNonExpired() || !user1.isAccountNonLocked() || !user1.isCredentialsNonExpired())
+            return new ApiResponse("Your Account Does Not Have Access to This Function",false);
+        user1.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user1);
+        return new ApiResponse("Password Changed Successfully",true);
+    }
 }
