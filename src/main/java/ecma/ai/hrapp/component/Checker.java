@@ -3,6 +3,7 @@ package ecma.ai.hrapp.component;
 import ecma.ai.hrapp.entity.Role;
 import ecma.ai.hrapp.entity.User;
 import ecma.ai.hrapp.entity.enums.RoleName;
+import ecma.ai.hrapp.repository.TaskRepository;
 import ecma.ai.hrapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,6 +43,30 @@ public class Checker {
             }
         }
         return false;
+    }
+
+    public Integer checkForTask(String role){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Optional<User> optionalUser = userRepository.findById(user.getId());
+
+        if (optionalUser.isPresent()) {
+            Set<Role> roles = optionalUser.get().getRoles();
+
+            for (Role adminRole : roles) {
+                if (role.equals(RoleName.ROLE_MANAGER.name()) &&
+                        adminRole.getName().name().equals(RoleName.ROLE_DIRECTOR.name())) {
+                    return 1;
+                }
+                if (role.equals(RoleName.ROLE_STAFF.name()) &&
+                        (adminRole.getName().name().equals(RoleName.ROLE_MANAGER.name())||
+                        adminRole.getName().name().equals(RoleName.ROLE_DIRECTOR.name()))) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
+
     }
 
 

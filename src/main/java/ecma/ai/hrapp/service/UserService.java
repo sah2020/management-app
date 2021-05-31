@@ -77,19 +77,19 @@ public class UserService {
 
     }
 
-    public ApiResponse edit(String password){
+    public ApiResponse edit(String password) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Optional<User> optionalUser = userRepository.findById(user.getId());
 
         if (!optionalUser.isPresent())
-            return new ApiResponse("Not Found",false);
+            return new ApiResponse("Not Found", false);
 
         User user1 = optionalUser.get();
         if (!user1.isEnabled() || !user1.isAccountNonExpired() || !user1.isAccountNonLocked() || !user1.isCredentialsNonExpired())
-            return new ApiResponse("Your Account Does Not Have Access to This Function",false);
+            return new ApiResponse("Your Account Does Not Have Access to This Function", false);
         user1.setPassword(passwordEncoder.encode(password));
         userRepository.save(user1);
-        return new ApiResponse("Password Changed Successfully",true);
+        return new ApiResponse("Password Changed Successfully", true);
     }
 }

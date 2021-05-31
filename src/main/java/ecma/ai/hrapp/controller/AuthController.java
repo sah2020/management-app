@@ -42,9 +42,9 @@ public class AuthController {
 
 
     @GetMapping("/user/verifyEmail")
-    public HttpEntity<?> verifyEmail(@RequestParam String email, @RequestParam String code){
-        ApiResponse apiResponse  = myAuthService.verifyEmail(email,code);
-        return ResponseEntity.status(apiResponse.isSuccess()?201:409).body(apiResponse);
+    public HttpEntity<?> verifyEmail(@RequestParam String email, @RequestParam String code) {
+        ApiResponse apiResponse = myAuthService.verifyEmail(email, code);
+        return ResponseEntity.status(apiResponse.isSuccess() ? 201 : 409).body(apiResponse);
     }
 
 

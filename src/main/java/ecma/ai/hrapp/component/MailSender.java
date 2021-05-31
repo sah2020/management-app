@@ -39,5 +39,10 @@ public class MailSender {
         return send(email, text);
     }
 
+    public boolean mailTextAddTask(String email, String taskName) throws MessagingException {
+        String text = "Sizga yangi" + taskName + " nomli task belgilandi";
+
+        return send(email, text);
+    }
 
 }

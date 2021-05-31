@@ -5,7 +5,7 @@
 --verifyEmail GET
 --ApiResponse da login yolga otvoramiz
 --loginga username va password bilan kiradi
-api/user/edit yolida kodni ozgartirishi mumkin boladi
+--api/user/edit yolida kodni ozgartirishi mumkin boladi
 
 2. Vazifa
 
@@ -24,12 +24,12 @@ api/user/edit yolida kodni ozgartirishi mumkin boladi
 --Kompaniyaning bitta direktori bo’ladi.
 --Direktor managerlarni qo’shadi.
 --Managerlarni qo’shganda ularning email manziliga link jo’natiladi.
--Bo’lim rahbarlari ichida HR_MANAGER degan lavozim bo’lishi kerak.
--Ushbu lavozimdagi manager tizimga boshqa xodimlarni qo’shadi. Xodimlar ro’yxatga olinganda ularning ham email manziliga link jo’natiladi.
+--Bo’lim rahbarlari ichida HR_MANAGER degan lavozim bo’lishi kerak.
+--Ushbu lavozimdagi manager tizimga boshqa xodimlarni qo’shadi. Xodimlar ro’yxatga olinganda ularning ham email manziliga link jo’natiladi.
 
 ----
--Xodimlar tizimga kirish uchun emailiga kelgan link orqali tizimda o’ziga parol qo’yadi.
--Xodimlarni email manzili takrorlanmas username hisobalandi.(-_-)
+--Xodimlar tizimga kirish uchun emailiga kelgan link orqali tizimda o’ziga parol qo’yadi.
+--Xodimlarni email manzili takrorlanmas username hisobalandi.(-_-)
 -
 
 

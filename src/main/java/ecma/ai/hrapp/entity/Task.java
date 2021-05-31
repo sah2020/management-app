@@ -33,7 +33,7 @@ public class Task extends AbsEntity {
     private User taskTaker;//qabul qiluvchi
 
     @Enumerated(EnumType.STRING)
-    private TaskStatus status;
+    private TaskStatus status = TaskStatus.NEW;
 
     private Timestamp completedDate;
 }
