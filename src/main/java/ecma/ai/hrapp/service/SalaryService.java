@@ -53,17 +53,14 @@ public class SalaryService {
         Optional<User> byEmail = userRepository.findByEmail(email);
         if (!byEmail.isPresent()) return new ApiResponse("User not found",false);
         User user = byEmail.get();
-
         Set<Role> roles = user.getRoles();
         String role = RoleName.ROLE_STAFF.name();
         for (Role rolex : roles) {
             role = rolex.getName().name();
         }
-
         boolean check = checker.check(role);
         if(!check)
             return new ApiResponse("Sizda huquq yo'q!", false);
-
         return new ApiResponse("List by Owner", true, salaryRepository.findAllByOwner(user));
     }
 
@@ -71,9 +68,7 @@ public class SalaryService {
         boolean check = checker.check();
         if (!check)
             return new ApiResponse("Sizda huquq yo'q", false);
-
         Month period = null;
-
         for (Month value : Month.values()) {
             if (value.name().equals(month)){
                 period = value;
@@ -82,7 +77,6 @@ public class SalaryService {
         }
         if (period == null)
             return new ApiResponse("Month xato!", false);
-
         return new ApiResponse("List by period", true,salaryRepository.findAllByPeriod(period));
     }
 
