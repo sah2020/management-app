@@ -9,6 +9,9 @@ import java.util.UUID;
 public class TurniketDTO {
     @NotNull
     private Integer companyId;
+
     @NotNull
     private UUID userId;
+
+    private boolean enabled = true;
 }

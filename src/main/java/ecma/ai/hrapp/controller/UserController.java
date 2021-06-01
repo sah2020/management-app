@@ -5,6 +5,7 @@ import ecma.ai.hrapp.payload.UserDto;
 import ecma.ai.hrapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,5 +33,13 @@ public class UserController {
     public HttpEntity<?> edit(@RequestBody String password){
         ApiResponse apiResponse = userService.edit(password);
         return ResponseEntity.status(apiResponse.isSuccess()?201:409).body(apiResponse);
+    }
+
+    //FOR DIRECTOR AND MANAGER
+    @GetMapping("/{email}")
+    public HttpEntity<?> getOneUser(@PathVariable String email){
+        ApiResponse apiResponse = userService.getOne(email);
+        return ResponseEntity.status(apiResponse.isSuccess()? HttpStatus.OK:HttpStatus.BAD_REQUEST).body(apiResponse);
+
     }
 }

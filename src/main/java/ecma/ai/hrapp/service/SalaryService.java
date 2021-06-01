@@ -47,7 +47,7 @@ public class SalaryService {
         paidSalary.setOwner(user);
         paidSalary.setPeriod(salaryDto.getPeriod());
         PaidSalary save = salaryRepository.save(paidSalary);
-        return new ApiResponse("Xodimga oylik kiritildi!", true);
+        return new ApiResponse("Xodimga oylik kiritildi!", true,save);
     }
     public ApiResponse getByUser(String email){
         Optional<User> byEmail = userRepository.findByEmail(email);

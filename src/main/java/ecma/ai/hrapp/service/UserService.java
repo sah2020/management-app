@@ -3,26 +3,18 @@ package ecma.ai.hrapp.service;
 import ecma.ai.hrapp.component.Checker;
 import ecma.ai.hrapp.component.MailSender;
 import ecma.ai.hrapp.component.PasswordGenerator;
-import ecma.ai.hrapp.entity.Company;
-import ecma.ai.hrapp.entity.Role;
-import ecma.ai.hrapp.entity.Turniket;
-import ecma.ai.hrapp.entity.User;
+import ecma.ai.hrapp.entity.*;
 import ecma.ai.hrapp.payload.ApiResponse;
 import ecma.ai.hrapp.payload.UserDto;
-import ecma.ai.hrapp.repository.CompanyRepository;
-import ecma.ai.hrapp.repository.RoleRepository;
-import ecma.ai.hrapp.repository.TurniketRepository;
-import ecma.ai.hrapp.repository.UserRepository;
+import ecma.ai.hrapp.repository.*;
+import net.bytebuddy.implementation.auxiliary.AuxiliaryType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -43,6 +35,10 @@ public class UserService {
     TurniketRepository turniketRepository;
     @Autowired
     CompanyRepository companyRepository;
+    @Autowired
+    TurniketHistoryRepository turniketHistoryRepository;
+    @Autowired
+    TaskRepository taskRepository;
 
     public ApiResponse add(UserDto userDto) throws MessagingException {
         User odamQushadiganUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -78,9 +74,7 @@ public class UserService {
         Turniket turniket=new Turniket();
         turniket.setOwner(save);
         Optional<Company> byDirectorId = companyRepository.findByDirectorId(odamQushadiganUser.getId());
-        if (byDirectorId.isPresent()) {
-            turniket.setCompany(byDirectorId.get());
-        }
+        byDirectorId.ifPresent(turniket::setCompany);
         turniketRepository.save(turniket);
         //mail xabar yuborish kk
         boolean addStaff = mailSender.mailTextAddStaff(userDto.getEmail(), code, password);
@@ -107,5 +101,25 @@ public class UserService {
         user1.setPassword(passwordEncoder.encode(password));
         userRepository.save(user1);
         return new ApiResponse("Password Changed Successfully", true);
+    }
+
+    public ApiResponse getOne(String email) {
+        if (!checker.check())
+            return new ApiResponse("Dostup Net",false);
+        if (!userRepository.findByEmail(email).isPresent())
+            return new ApiResponse("Email Not Found",false);
+        User user = userRepository.findByEmail(email).get();
+        if (!turniketRepository.findByOwnerId(user.getId()).isPresent())
+            return new ApiResponse("Turniekt Not Found",false);
+
+        Turniket turniket = turniketRepository.findByOwnerId(user.getId()).get();
+        List<TurniketHistory> turniketHistoryList = turniketHistoryRepository.findAllByTurniket(turniket);
+        List<Task> taskList = taskRepository.findAllByTaskTaker(user);
+
+        List<Object> finalList = new ArrayList<>();
+        finalList.add(turniketHistoryList);
+        finalList.add(taskList);
+
+        return new ApiResponse("Success",true,finalList);
     }
 }
