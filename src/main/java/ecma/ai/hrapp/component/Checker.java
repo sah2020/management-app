@@ -68,6 +68,20 @@ public class Checker {
         return 0;
 
     }
+    public boolean check( ){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> userOptional = userRepository.findById(user.getId());
+        if (userOptional.isPresent()){
+            for (Role role : user.getRoles()) {
+                if (role.getName().name().equals(RoleName.ROLE_DIRECTOR.name())
+                        || ((role.getName().name().equals(RoleName.ROLE_MANAGER.name())
+                        && user.getPosition().toLowerCase().equals("hrmanagement")))){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
 
