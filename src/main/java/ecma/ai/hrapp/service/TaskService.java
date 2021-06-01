@@ -5,6 +5,7 @@ import ecma.ai.hrapp.component.MailSender;
 import ecma.ai.hrapp.entity.Role;
 import ecma.ai.hrapp.entity.Task;
 import ecma.ai.hrapp.entity.User;
+import ecma.ai.hrapp.entity.enums.TaskStatus;
 import ecma.ai.hrapp.payload.ApiResponse;
 import ecma.ai.hrapp.payload.TaskDTO;
 import ecma.ai.hrapp.repository.TaskRepository;
@@ -15,8 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import java.util.Optional;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.util.*;
 
 @Service
 public class TaskService {
@@ -75,5 +76,46 @@ public class TaskService {
             return new ApiResponse("Task Added, but there was error in sending email", false, savedTask);
 
         return new ApiResponse("Task Added and Email Successfully Sent!", true, savedTask);
+    }
+
+    public ApiResponse getStaffsTask() {
+        User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> byId = userRepository.findById(user1.getId());
+        if (!byId.isPresent()) return new ApiResponse("User not found", false);
+        User user = byId.get();
+        List<Task> byTaskTakerId = taskRepository.findAllByTaskTaker(user);
+        List<TaskDTO> tasks = new ArrayList<>();
+        for (Task task : byTaskTakerId) {
+            TaskDTO taskDTO = new TaskDTO(task.getName(), task.getDescription(), task.getDeadline(),
+                    task.getStatus(), task.getTaskGiver().getId(), task.getCompletedDate());
+            tasks.add(taskDTO);
+        }
+        return new ApiResponse("Your tasks", true, byTaskTakerId);
+    }
+
+    public ApiResponse staffComletedTask(UUID id, TaskDTO taskDTO) {
+        User taskTaker = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<User> byId = userRepository.findById(taskTaker.getId());
+        if (!byId.isPresent()) return new ApiResponse("User not found", false);
+        User user = byId.get();
+        Optional<Task> byId1 = taskRepository.findById(id);
+        if (!byId1.isPresent()) return new ApiResponse("Task not found", false);
+        Task task = byId1.get();
+        if (!task.getTaskTaker().getId().equals(user.getId()))
+            return new ApiResponse("Task is not belong to you,and you don't change", false);
+        task.setStatus(taskDTO.getStatus());
+        if (taskDTO.getStatus().name().equals(TaskStatus.COMPLETED.name())) {
+            task.setCompletedDate(new Timestamp(System.currentTimeMillis()));
+        }
+        Task save = taskRepository.save(task);
+        if (taskDTO.getStatus().name().equals(TaskStatus.COMPLETED.name())) {
+            try {
+                boolean b = mailSender.mailTextCompleteTask(save.getTaskGiver().getEmail(), save.getTaskTaker().getUsername(), save.getName());
+                if (b) return new ApiResponse("Task saqlandi qilindi va emailga xabar junatildi",true);
+            } catch (MessagingException e) {
+                return new ApiResponse("Task saqlandi, lekin emailga xabar yuborishda xatolik kelib chiqdi",true);
+            }
+        }
+        return new ApiResponse("Task edited successfully",true);
     }
 }

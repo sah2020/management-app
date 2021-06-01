@@ -4,8 +4,10 @@ import ecma.ai.hrapp.entity.Company;
 import ecma.ai.hrapp.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
 //    Optional<User> findByEmail(String email);
+    Optional<Company> findByDirectorId(UUID director_id);
 }

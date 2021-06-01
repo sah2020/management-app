@@ -44,5 +44,10 @@ public class MailSender {
 
         return send(email, text);
     }
+    public boolean mailTextCompleteTask(String email,String taskTaker, String taskName) throws MessagingException {
+        String text = taskTaker+" "+taskName+"nomli vazifani bajarib bo'ldi";
+
+        return send(email, text);
+    }
 
 }
