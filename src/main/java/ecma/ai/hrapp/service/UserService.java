@@ -3,11 +3,15 @@ package ecma.ai.hrapp.service;
 import ecma.ai.hrapp.component.Checker;
 import ecma.ai.hrapp.component.MailSender;
 import ecma.ai.hrapp.component.PasswordGenerator;
+import ecma.ai.hrapp.entity.Company;
 import ecma.ai.hrapp.entity.Role;
+import ecma.ai.hrapp.entity.Turniket;
 import ecma.ai.hrapp.entity.User;
 import ecma.ai.hrapp.payload.ApiResponse;
 import ecma.ai.hrapp.payload.UserDto;
+import ecma.ai.hrapp.repository.CompanyRepository;
 import ecma.ai.hrapp.repository.RoleRepository;
+import ecma.ai.hrapp.repository.TurniketRepository;
 import ecma.ai.hrapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,8 +39,14 @@ public class UserService {
     PasswordEncoder passwordEncoder;
     @Autowired
     MailSender mailSender;
+    @Autowired
+    TurniketRepository turniketRepository;
+    @Autowired
+    CompanyRepository companyRepository;
 
     public ApiResponse add(UserDto userDto) throws MessagingException {
+        User odamQushadiganUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         Optional<Role> optionalRole = roleRepository.findById(userDto.getRoleId());
         if (!optionalRole.isPresent()) return new ApiResponse("Role id not found!", false);
 
@@ -60,19 +70,25 @@ public class UserService {
 
         String password = passwordGenerator.genRandomPassword(8);
         user.setPassword(passwordEncoder.encode(password));
-//    user.setPassword(password);
+        user.setPassword(password);
         String code = UUID.randomUUID().toString();
         user.setVerifyCode(code);
 
-        userRepository.save(user);
-
+        User save = userRepository.save(user);
+        Turniket turniket=new Turniket();
+        turniket.setOwner(save);
+        Optional<Company> byDirectorId = companyRepository.findByDirectorId(odamQushadiganUser.getId());
+        if (byDirectorId.isPresent()) {
+            turniket.setCompany(byDirectorId.get());
+        }
+        turniketRepository.save(turniket);
         //mail xabar yuborish kk
         boolean addStaff = mailSender.mailTextAddStaff(userDto.getEmail(), code, password);
 
         if (addStaff) {
-            return new ApiResponse("User qo'shildi! va emailga xabar ketdi!", true);
+            return new ApiResponse("User qo'shildi!,emailga xabar ketdi,va turniket berildi!", true);
         } else {
-            return new ApiResponse("Xatolik yuz berdi", false);
+            return new ApiResponse("User qo'shildi,turniket berildi,Email junatishda Xatolik yuz berdi", false);
         }
 
     }

@@ -41,4 +41,17 @@ public class TaskDTO {
         this.deadline = deadline;
         this.taskTakerId = taskTakerId;
     }
+
+    public TaskDTO(String name, String description, Timestamp deadline, TaskStatus status, UUID taskGiverId, Timestamp completedDate) {
+        this.name = name;
+        this.description = description;
+        this.deadline = deadline;
+        this.status = status;
+        this.taskGiverId = taskGiverId;
+        this.completedDate = completedDate;
+    }
+
+    public TaskDTO(TaskStatus status) {
+        this.status = status;
+    }
 }
