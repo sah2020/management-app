@@ -69,8 +69,8 @@ public class Xavfszlik extends WebSecurityConfigurerAdapter {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");//kimdan yuborilyapti
         mailSender.setPort(587);
-        mailSender.setUsername("official.sah.biz@gmail.com");
-        mailSender.setPassword("20Cgyhn14863gbji02");
+        mailSender.setUsername("email@gmail.com");
+        mailSender.setPassword("password");
 
         Properties properties = mailSender.getJavaMailProperties();
 
