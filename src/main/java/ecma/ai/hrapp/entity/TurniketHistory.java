@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
+//TURNSTILE RECORDS HISTORY
 @Entity
 @Data
 @AllArgsConstructor
@@ -32,5 +33,5 @@ public class TurniketHistory {
     @CreationTimestamp
     private Timestamp time;
 
-    private boolean successful;//
+    private boolean successful;
 }

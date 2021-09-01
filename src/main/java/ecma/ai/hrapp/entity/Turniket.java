@@ -17,7 +17,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity//bu turniket
+@Entity//TURNSTILE
 @EntityListeners(AuditingEntityListener.class)
 public class Turniket extends AbsEntity {
 
@@ -25,7 +25,7 @@ public class Turniket extends AbsEntity {
     private Company company;
 
     @OneToOne
-    private User owner;//egasi
+    private User owner;
 
     private String number = UUID.randomUUID().toString();
 

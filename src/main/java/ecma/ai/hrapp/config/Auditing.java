@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Configuration
 @EnableJpaAuditing
-public class AuditQilish {
+public class Auditing {
 
 
     @Bean

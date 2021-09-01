@@ -23,7 +23,7 @@ import java.util.Properties;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class Xavfszlik extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     MyAuthService myAuthService;
@@ -40,7 +40,7 @@ public class Xavfszlik extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
     @Bean
@@ -67,10 +67,10 @@ public class Xavfszlik extends WebSecurityConfigurerAdapter {
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");//kimdan yuborilyapti
+        mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-        mailSender.setUsername("email@gmail.com");
-        mailSender.setPassword("password");
+        mailSender.setUsername("email@gmail.com");//SENDER EMAIL
+        mailSender.setPassword("password");//EMAIL PASSWORD
 
         Properties properties = mailSender.getJavaMailProperties();
 

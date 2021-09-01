@@ -16,7 +16,7 @@ public class MailSender {
 
     public boolean send(String to, String text) throws MessagingException {
 
-        String from = "email@gmail.com";
+        String from = "email@gmail.com";//FAKE EMAIL
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
 
@@ -28,24 +28,25 @@ public class MailSender {
         return true;
     }
 
-
+    //EMAIL VERIFICATION
     public boolean mailTextAddStaff(String email, String code, String pass) throws MessagingException {
         String link = "http://localhost:80/api/user/verifyEmail?email=" + email + "&code=" + code;
 
-        String text = "<a href=\"" + link + "\">Emailni tasdiqlash</a>\n" +
-                "<br>\n" +
-                "<p>Parolingiz: " + pass + "</p>";
-
+        String text = link + "VERIFY YOUR EMAIL\n" +
+                "**YOUR PASSWORD: " + pass + "**";
         return send(email, text);
     }
 
+    //NEW TASK NOTIFICATION EMAIL
     public boolean mailTextAddTask(String email, String taskName) throws MessagingException {
-        String text = "Sizga yangi" + taskName + " nomli task belgilandi";
+        String text = "YOU ARE GIVEN A NEW TASK CALLED " + taskName;
 
         return send(email, text);
     }
+
+    //TASK COMPLETE NOTIFICATION EMAIL
     public boolean mailTextCompleteTask(String email,String taskTaker, String taskName) throws MessagingException {
-        String text = taskTaker+" "+taskName+"nomli vazifani bajarib bo'ldi";
+        String text = taskTaker+" HAS COMPLETED THE TASK CALLED "+taskName;
 
         return send(email, text);
     }

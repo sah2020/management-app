@@ -49,7 +49,7 @@ public class UserService {
         boolean check = checker.check(optionalRole.get().getName().name());//
 
         if (!check) {
-            return new ApiResponse("Dostup netu!", false);
+            return new ApiResponse("ACCESS DENIED!", false);
         }
 
         if (userRepository.existsByEmail(userDto.getEmail())) {
@@ -71,7 +71,7 @@ public class UserService {
         user.setVerifyCode(code);
 
         User save = userRepository.save(user);
-        Turniket turniket=new Turniket();
+        Turniket turniket = new Turniket();
         turniket.setOwner(save);
         Optional<Company> byDirectorId = companyRepository.findByDirectorId(odamQushadiganUser.getId());
         byDirectorId.ifPresent(turniket::setCompany);
@@ -80,9 +80,9 @@ public class UserService {
         boolean addStaff = mailSender.mailTextAddStaff(userDto.getEmail(), code, password);
 
         if (addStaff) {
-            return new ApiResponse("User qo'shildi!,emailga xabar ketdi,va turniket berildi!", true);
+            return new ApiResponse("Task Added and Email Successfully Sent And Turnstile is given!", true);
         } else {
-            return new ApiResponse("User qo'shildi,turniket berildi,Email junatishda Xatolik yuz berdi", false);
+            return new ApiResponse("Task Added, Turnstile is given, but there was error in sending email", false);
         }
 
     }
@@ -105,12 +105,12 @@ public class UserService {
 
     public ApiResponse getOne(String email) {
         if (!checker.check())
-            return new ApiResponse("Dostup Net",false);
+            return new ApiResponse("Dostup Net", false);
         if (!userRepository.findByEmail(email).isPresent())
-            return new ApiResponse("Email Not Found",false);
+            return new ApiResponse("Email Not Found", false);
         User user = userRepository.findByEmail(email).get();
         if (!turniketRepository.findByOwnerId(user.getId()).isPresent())
-            return new ApiResponse("Turniekt Not Found",false);
+            return new ApiResponse("Turnstile Not Found", false);
 
         Turniket turniket = turniketRepository.findByOwnerId(user.getId()).get();
         List<TurniketHistory> turniketHistoryList = turniketHistoryRepository.findAllByTurniket(turniket);
@@ -120,6 +120,6 @@ public class UserService {
         finalList.add(turniketHistoryList);
         finalList.add(taskList);
 
-        return new ApiResponse("Success",true,finalList);
+        return new ApiResponse("Success", true, finalList);
     }
 }

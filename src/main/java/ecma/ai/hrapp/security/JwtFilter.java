@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = httpServletRequest.getHeader("Authorization");
 
         if (token != null && token.startsWith("Bearer")) {
-            token = token.substring(7); //xaqiqiy token
+            token = token.substring(7); //REAL token
 
             boolean validateToken = jwtProvider.validateToken(token);
 

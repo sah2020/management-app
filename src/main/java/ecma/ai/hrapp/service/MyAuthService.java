@@ -40,7 +40,7 @@ public class MyAuthService implements UserDetailsService {
             userRepository.save(user);
             turniketService.add(1,user.getId());
 
-            return new ApiResponse("Account Verified and Turniket is Given",true);
+            return new ApiResponse("Account Verified and TURNSTILE is Given",true);
         }
         return new ApiResponse("Account not found",false);
     }

@@ -27,9 +27,9 @@ public class SalaryService {
     @Autowired
     UserRepository userRepository;
 
-    public ApiResponse add(SalaryDto salaryDto){
+    public ApiResponse add(SalaryDto salaryDto) {
         Optional<User> byEmail = userRepository.findByEmail(salaryDto.getEmail());
-        if (!byEmail.isPresent()) return new ApiResponse("User not found",false);
+        if (!byEmail.isPresent()) return new ApiResponse("User not found", false);
         User user = byEmail.get();
 
         Set<Role> roles = user.getRoles();
@@ -39,7 +39,7 @@ public class SalaryService {
         }
 
         boolean check = checker.check(role);
-        if(!check)
+        if (!check)
             return new ApiResponse("No access", false);
 
         PaidSalary paidSalary = new PaidSalary();
@@ -47,11 +47,12 @@ public class SalaryService {
         paidSalary.setOwner(user);
         paidSalary.setPeriod(salaryDto.getPeriod());
         PaidSalary save = salaryRepository.save(paidSalary);
-        return new ApiResponse("Xodimga oylik kiritildi!", true,save);
+        return new ApiResponse("SALARY ENTERED!", true, save);
     }
-    public ApiResponse getByUser(String email){
+
+    public ApiResponse getByUser(String email) {
         Optional<User> byEmail = userRepository.findByEmail(email);
-        if (!byEmail.isPresent()) return new ApiResponse("User not found",false);
+        if (!byEmail.isPresent()) return new ApiResponse("User not found", false);
         User user = byEmail.get();
         Set<Role> roles = user.getRoles();
         String role = RoleName.ROLE_STAFF.name();
@@ -59,25 +60,25 @@ public class SalaryService {
             role = rolex.getName().name();
         }
         boolean check = checker.check(role);
-        if(!check)
-            return new ApiResponse("Sizda huquq yo'q!", false);
+        if (!check)
+            return new ApiResponse("BAD ACTION!", false);
         return new ApiResponse("List by Owner", true, salaryRepository.findAllByOwner(user));
     }
 
-    public ApiResponse getByMonth(String month){
+    public ApiResponse getByMonth(String month) {
         boolean check = checker.check();
         if (!check)
-            return new ApiResponse("Sizda huquq yo'q", false);
+            return new ApiResponse("BAD ACTION", false);
         Month period = null;
         for (Month value : Month.values()) {
-            if (value.name().equals(month)){
+            if (value.name().equals(month)) {
                 period = value;
                 break;
             }
         }
         if (period == null)
-            return new ApiResponse("Month xato!", false);
-        return new ApiResponse("List by period", true,salaryRepository.findAllByPeriod(period));
+            return new ApiResponse("INVALID MONTH!", false);
+        return new ApiResponse("List by period", true, salaryRepository.findAllByPeriod(period));
     }
 
 }

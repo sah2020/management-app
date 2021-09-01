@@ -38,13 +38,13 @@ public class TurniketHistoryService {
             return new ApiResponse("Success",true,turniketHistoryRepository.findAll());
         }
         else{
-            return new ApiResponse("Dostup Netu",false);
+            return new ApiResponse("ACCESS DENIED",false);
         }
 
     }
     public ApiResponse enteringCompanyAdd(TurniketHistoryDto turniketHistoryDto) {
         Optional<Turniket> byId = turniketRepository.findById(turniketHistoryDto.getTurniketNumber());
-        if (!byId.isPresent()) return new ApiResponse("Turniket not found,no access to enter", false);
+        if (!byId.isPresent()) return new ApiResponse("TURNSTILE not found,no access to enter", false);
 
         Set<Role> roles = byId.get().getOwner().getRoles();
         String role = RoleName.ROLE_STAFF.name();
@@ -55,12 +55,12 @@ public class TurniketHistoryService {
 
         boolean check = checker.check(role);
         if (!check)
-            return new ApiResponse("Karochchi brat ruxsatiz yo'q joyga kirmoqchi bo'lyapsiz! Sizda huquq yo'q!", false);
+            return new ApiResponse("BAD ACTION!!!", false);
 
         TurniketHistory turniketHistory = new TurniketHistory();
         turniketHistory.setTurniket(byId.get());
         turniketHistory.setType(turniketHistoryDto.getType());
         turniketHistoryRepository.save(turniketHistory);
-        return new ApiResponse("Yo'liz ochiq, bemalol kirishiz mumkin!", true);
+        return new ApiResponse("WELCOME!", true);
     }
 }

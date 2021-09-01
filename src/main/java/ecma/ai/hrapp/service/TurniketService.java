@@ -54,7 +54,7 @@ public class TurniketService {
         turniket.setOwner(optionalUser.get());
         turniket.setCompany(optionalCompany.get());
         Turniket savedTurniket = turniketRepository.save(turniket);
-        return new ApiResponse("Turniket Addded", true, savedTurniket);
+        return new ApiResponse("TURNSTILE Addded", true, savedTurniket);
     }
 
     public ApiResponse getAll() {
@@ -70,7 +70,7 @@ public class TurniketService {
             return new ApiResponse("Access Not Found", false);
         Optional<Turniket> optionalTurniket = turniketRepository.findByNumber(number);
         if (!optionalTurniket.isPresent())
-            return new ApiResponse("Turniket Not Found", false);
+            return new ApiResponse("TURNSTILE Not Found", false);
         turniketRepository.deleteByNumber(number);
         return new ApiResponse("Successfully Deleted", true);
     }

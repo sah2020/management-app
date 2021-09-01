@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TurniketHistoryRepository extends JpaRepository<TurniketHistory, UUID> {
-//    Optional<User> findByEmail(String email);
-    List<TurniketHistory> findAllByTurniket(Turniket turniket);
+
+  List<TurniketHistory> findAllByTurniket(Turniket turniket);
 }

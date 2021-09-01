@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -37,9 +36,8 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (initialMode.equals("always")) {
-//            List<Role> all = roleRepository.findAll();
 
-            Set<Role> roles = new HashSet<>(roleRepository.findAll()); //bazada necha xil rol bo'lsa berdm
+            Set<Role> roles = new HashSet<>(roleRepository.findAll()); //ALL ROLES ARE COMBINED
 
 
             User user = new User("direktor", passwordEncoder.encode("123"),
@@ -49,7 +47,5 @@ public class DataLoader implements CommandLineRunner {
             Company company = new Company("PDP", direktor);
             companyRepository.save(company);
         }
-        //localhost:80//api/login
-        //eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkckBtYWlsLnJ1IiwiaWF0IjoxNjIyMTA4Nzk1LCJleHAiOjE2MjIxMTIzOTV9.9CCfS3Gh5QjZgYVzG5YBG__qe54b7SJiRvf48mpnZ-nxOvhmHPJc-IMS5jelEM9GtJflO8Y18ZEI-BIPduYDuQ
     }
 }

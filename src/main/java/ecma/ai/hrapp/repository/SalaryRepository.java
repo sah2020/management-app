@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SalaryRepository extends JpaRepository<PaidSalary, UUID> {
-        List<PaidSalary> findAllByOwner(User owner);
+    List<PaidSalary> findAllByOwner(User owner);
 
 
     List<PaidSalary> findAllByPeriod(Month period);

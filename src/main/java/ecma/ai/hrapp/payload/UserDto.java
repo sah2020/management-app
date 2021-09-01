@@ -15,8 +15,8 @@ public class UserDto {
     private String email;//alibekxudoyqulovofficial@gmail.com
 
     @NotNull
-    private String position;//katta boshliq )))))//ROLE_MANAGER
+    private String position;//ROLE_MANAGER
 
     @NotNull
-    private Integer roleId; //3 xodim 2 manager
+    private Integer roleId; //3 STAFF 2 manager
 }

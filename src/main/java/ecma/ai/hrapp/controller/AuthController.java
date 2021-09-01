@@ -28,14 +28,14 @@ public class AuthController {
     public HttpEntity<?> logInToSystem(@RequestBody LoginDto loginDto) {
 
         try {
-            //shunaqa tizim odami bormi tekshirish
+            //CHECKS IF USER IS ALREADY REGISTERED
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
 
             String token = jwtProvider.generateToken(loginDto.getUsername());
             return ResponseEntity.ok(token);
 
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body("Login yoki Parolz notogri!");
+            return ResponseEntity.status(401).body("INCORRECT LOGIN OR PASSWORD!");
         }
 
     }

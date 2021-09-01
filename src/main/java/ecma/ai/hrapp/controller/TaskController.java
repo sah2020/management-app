@@ -34,7 +34,7 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public HttpEntity<?> editTaskStaff(@PathVariable UUID id, @Valid @RequestBody TaskDTO taskDTO) {
-        ApiResponse apiResponse = taskService.staffComletedTask(id, taskDTO);
+        ApiResponse apiResponse = taskService.staffCompletedTask(id, taskDTO);
         return ResponseEntity.status(apiResponse.isSuccess() ? HttpStatus.ACCEPTED : HttpStatus.CONFLICT).body(apiResponse);
     }
 }

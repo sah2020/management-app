@@ -9,7 +9,7 @@ import java.util.Date;
 @Component
 public class JwtProvider {
 
-    static long expireTime = 1000 * 3600 * 24;// 1soat
+    static long expireTime = 1000 * 3600 * 24;// 1 HOUR
     static String secretKey = "BuniSenBilolmaysan";
 
 
@@ -25,7 +25,6 @@ public class JwtProvider {
     }
 
 
-    //token aynan yaroqli va bzniki ekanligini tekshirish
     public boolean validateToken(String token) {
         try {
             Jwts
@@ -39,7 +38,6 @@ public class JwtProvider {
         return false;
     }
 
-    //tokendan uni usernameni ajratib olish un metod
     public String getUsernameFromToken(String token) {
         return Jwts
                 .parser()

@@ -59,7 +59,7 @@ public class TaskService {
         }
 
         if (checkerInt < 1)
-            return new ApiResponse("Dostup Netu", false);
+            return new ApiResponse("ACCESS DENIED", false);
 
         Task task = new Task();
         task.setName(taskDTO.getName());
@@ -93,7 +93,7 @@ public class TaskService {
         return new ApiResponse("Your tasks", true, byTaskTakerId);
     }
 
-    public ApiResponse staffComletedTask(UUID id, TaskDTO taskDTO) {
+    public ApiResponse staffCompletedTask(UUID id, TaskDTO taskDTO) {
         User taskTaker = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> byId = userRepository.findById(taskTaker.getId());
         if (!byId.isPresent()) return new ApiResponse("User not found", false);
@@ -102,7 +102,7 @@ public class TaskService {
         if (!byId1.isPresent()) return new ApiResponse("Task not found", false);
         Task task = byId1.get();
         if (!task.getTaskTaker().getId().equals(user.getId()))
-            return new ApiResponse("Task is not belong to you,and you don't change", false);
+            return new ApiResponse("Task DOES not belong to you,and you don't change", false);
         task.setStatus(taskDTO.getStatus());
         if (taskDTO.getStatus().name().equals(TaskStatus.COMPLETED.name())) {
             task.setCompletedDate(new Timestamp(System.currentTimeMillis()));
@@ -111,9 +111,9 @@ public class TaskService {
         if (taskDTO.getStatus().name().equals(TaskStatus.COMPLETED.name())) {
             try {
                 boolean b = mailSender.mailTextCompleteTask(save.getTaskGiver().getEmail(), save.getTaskTaker().getUsername(), save.getName());
-                if (b) return new ApiResponse("Task saqlandi qilindi va emailga xabar junatildi",true);
+                if (b) return new ApiResponse("Task Added and Email Successfully Sent",true);
             } catch (MessagingException e) {
-                return new ApiResponse("Task saqlandi, lekin emailga xabar yuborishda xatolik kelib chiqdi",true);
+                return new ApiResponse("Task Added, but there was error in sending email",true);
             }
         }
         return new ApiResponse("Task edited successfully",true);
